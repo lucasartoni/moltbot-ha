@@ -1,0 +1,52 @@
+name: Moltbot
+version: "1.0.0"
+slug: moltbot
+description: Your personal AI assistant - connects to Telegram, WhatsApp, Discord, Slack, and more
+url: https://github.com/moltbot/moltbot
+arch:
+  - aarch64
+  - amd64
+startup: application
+boot: auto
+init: false
+options:
+  agent_model: "anthropic/claude-opus-4-5"
+  anthropic_api_key: ""
+  openai_api_key: ""
+  telegram_bot_token: ""
+  telegram_allowed_groups: []
+  telegram_require_mention: true
+  whatsapp_enabled: false
+  discord_bot_token: ""
+  discord_allowed_servers: []
+  slack_bot_token: ""
+  slack_app_token: ""
+  sandbox_mode: "non-main"
+  log_level: "info"
+schema:
+  agent_model: str
+  anthropic_api_key: str?
+  openai_api_key: str?
+  telegram_bot_token: str?
+  telegram_allowed_groups:
+    - str
+  telegram_require_mention: bool
+  whatsapp_enabled: bool
+  discord_bot_token: str?
+  discord_allowed_servers:
+    - str
+  slack_bot_token: str?
+  slack_app_token: str?
+  sandbox_mode: list(off|main|non-main)
+  log_level: list(debug|info|warn|error)
+ports:
+  18789/tcp: 18789
+ports_description:
+  18789/tcp: Moltbot WebSocket Control Plane
+map:
+  - config:rw
+  - ssl:ro
+environment:
+  MOLTBOT_DATA_DIR: /data
+  MOLTBOT_CONFIG_DIR: /config/moltbot
+image: ghcr.io/lucasartoni/moltbot-ha/{arch}-addon-moltbot
