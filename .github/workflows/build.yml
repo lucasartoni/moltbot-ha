@@ -44,7 +44,7 @@ jobs:
       - name: Get base image
         id: base
         run: |
-          BASE=$(grep '${{ matrix.arch }}:' moltbot/build.yaml | sed 's/.*: *//')
+          BASE=$(grep '${{ matrix.arch }}:' moltbot/build.yaml | sed 's/^[^:]*: *//')
           echo "image=$BASE" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
