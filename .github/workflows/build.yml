@@ -44,7 +44,10 @@ jobs:
       - name: Get base image
         id: base
         run: |
-          BASE=$(grep '${{ matrix.arch }}:' moltbot/build.yaml | sed 's/^[^:]*: *//')
+          LINE=$(grep '${{ matrix.arch }}:' moltbot/build.yaml)
+          echo "Raw line: $LINE"
+          # Use shell parameter expansion to extract value after first ": " (more portable than sed)
+          BASE="${LINE#*: }"
           echo "Extracted base image: $BASE"
           if [[ ! "$BASE" =~ ^[a-z0-9].*/.+:.+ ]]; then
             echo "ERROR: Invalid base image format. Expected format: registry/image:tag"
