@@ -31,6 +31,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Lowercase repository name
+        id: repo
+        run: echo "name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
       - name: Get add-on version
         id: version
         run: |
@@ -66,8 +70,8 @@ jobs:
           build-args: |
             BUILD_FROM=${{ steps.base.outputs.image }}
           tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.arch }}-addon-moltbot:${{ steps.version.outputs.version }}
-            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.arch }}-addon-moltbot:latest
+            ${{ env.REGISTRY }}/${{ steps.repo.outputs.name }}/${{ matrix.arch }}-addon-moltbot:${{ steps.version.outputs.version }}
+            ${{ env.REGISTRY }}/${{ steps.repo.outputs.name }}/${{ matrix.arch }}-addon-moltbot:latest
           labels: |
             org.opencontainers.image.title=Moltbot
             org.opencontainers.image.description=Your personal AI assistant for Home Assistant
