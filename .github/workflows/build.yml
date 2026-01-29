@@ -45,6 +45,12 @@ jobs:
         id: base
         run: |
           BASE=$(grep '${{ matrix.arch }}:' moltbot/build.yaml | sed 's/^[^:]*: *//')
+          echo "Extracted base image: $BASE"
+          if [[ ! "$BASE" =~ ^[a-z0-9].*/.+:.+ ]]; then
+            echo "ERROR: Invalid base image format. Expected format: registry/image:tag"
+            echo "Got: '$BASE'"
+            exit 1
+          fi
           echo "image=$BASE" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
